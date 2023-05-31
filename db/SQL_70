@@ -1,0 +1,102 @@
+
+-- 511. Game Play Analysis I
+
+SELECT player_id, MIN(event_date) AS first_login
+    FROM Activity
+    GROUP BY player_id
+
+-- 550. Game Play Analysis IV  
+
+SELECT ROUND(
+    COUNT(DISTINCT player_id) / COUNT(DISTINCT player_id), 2) AS fraction FROM Activity
+    WHERE (player_id, DATE_SUB(event_date, INTERVAL 1 DAY))
+    IN (SELECT player_id, MIN(event_date) AS first_login FROM Activity GROUP BY player_id)
+
+-- 570. Managers with at Least 5 Direct Reports
+
+SELECT _name_ FROM Employee
+    WHERE id IN (SELECT manager_id 
+                 FROM Employee 
+                 GROUP BY manager_id HAVING COUNT(id) >= 5)
+
+-- 586. Customer Placing the Largest Number of Orders
+
+SELECT customer_number 
+    FROM Orders 
+    GROUP BY customer_number
+    ORDER BY COUNT(*) DESC LIMIT 1
+
+-- 607. Sales Person
+
+SELECT _name_ FROM SalesPerson 
+    WHERE sales_id NOT IN(
+        SELECT sales_id FROM Orders
+        WHERE com_id = (SELECT com_id FROM Company WHERE _name_ = 'RED')
+    )
+
+-- 608. Tree Node
+
+SELECT id, 
+    CASE WHEN p_id IS NULL THEN 'Root'
+         WHEN id IN (SELECT p_id FROM tree) THEN 'Inner'
+         ELSE 'Leaf'
+END AS Type FROM Tree ORDER BY id
+
+-- 610. Triangle Judgement
+
+SELECT x,y,z,
+    CASE WHEN x + y < z OR
+              x + z < y OR
+              y + z < x THEN 'No'
+                        ELSE 'Yes' 
+                        END AS Triangle FROM Triangle
+
+
+-- 1045. Customers Who Bought All Products
+
+SELECT customer_id FROM Customer 
+    GROUP BY customer_id
+    HAVING [COUNT(DISTINCT product_key)] = 
+           [SELECT COUNT(product_key) FROM Product]
+
+-- 1050. Actors and Directors Who Cooperated At Least Three Times
+
+SELECT actor_id, director_id FROM ActorDirector 
+    GROUP BY actor_id,director_id
+    HAVING COUNT(*) >= 3
+
+-- 1068. Product Sales Analysis I
+
+-- 1075. Project Employees I
+
+-- 1084. Sales Analysis III
+
+-- 1141. User Activity for the Past 30 Days I
+
+-- 1148. Article Views I
+
+-- 1164. Product Price at a Given Date
+
+-- 1193. Monthly Transactions I
+
+-- 1204. Last Person to Fit in the Bus 
+
+-- 1251. Average Selling Price
+
+-- 1280. Students and Examinations
+
+-- 1321. Restaurant Growth
+
+-- 1327. List the Products Ordered in a Period
+
+-- 1341. Movie Rating
+
+-- 1378. Replace Employee ID With The Unique Identifier
+
+-- 1393. Capital Gain/Loss
+
+-- 1407. Top Travellers
+
+-- 1484. Group Sold Products By The Date
+
+-- 1517. Find Users With Valid E-Mails
